@@ -8,17 +8,16 @@ import java.util.Properties;
 public class Config {
 public static Properties Properties(String sFile) throws IOException{
 		
-		InputStream inputStream = null;
+	InputStream inputStream = null;
 		
-		try {
-			inputStream = new FileInputStream(sFile);
-			Properties result = new Properties();
-			result.load(inputStream);
-			return result;
-		}finally {
-			if(inputStream != null) {
-				inputStream.close();
-			}
-		}
+	try {
+		inputStream = new FileInputStream(sFile);
+		Properties result = new Properties();
+		result.load(inputStream);
+		return result;
+	}finally {
+		if(inputStream != null) 
+			inputStream.close();
 	}
+}
 }

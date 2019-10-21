@@ -10,7 +10,7 @@ import es.uca.gii.csi19.distrito.util.Config;
 
 public class Data {
 
-public static String getPropertiesUrl() {return "./db.properties";}
+public static String getPropertiesUrl() { return "./db.properties"; }
 	
 	public static Connection Connection() throws Exception{
 		try {
@@ -32,13 +32,10 @@ public static String getPropertiesUrl() {return "./db.properties";}
 	}
 	
 	public static int Boolean2Sql(boolean b) {
-		int iBoolean = 0;
+		if(b) 
+			return 1;
 		
-		if(b) {
-			iBoolean = 1;
-		}
-		
-		return iBoolean;
+		return 0;
 	}
 	
 	public static String String2Sql(String s, boolean bAddQuotes, boolean bAddWildcards) {
@@ -47,13 +44,13 @@ public static String getPropertiesUrl() {return "./db.properties";}
 		sResult = sResult.replace("'", "''");
 		
 		if(bAddWildcards) {
-			sResult = "%".concat(sResult);
-			sResult = sResult.concat("%");
+			sResult = "%" + sResult;
+			sResult = sResult + "%";
 		}
 		
 		if(bAddQuotes) {
-			sResult = "'".concat(sResult);
-			sResult = sResult.concat("'");
+			sResult = "'" + sResult;
+			sResult = sResult + "'";
 		}
 		
 		return sResult;

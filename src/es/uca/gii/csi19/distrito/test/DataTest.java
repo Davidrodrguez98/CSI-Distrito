@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import es.uca.gii.csi19.distrito.data.Data;
@@ -18,6 +19,7 @@ class DataTest {
 		Data.LoadDriver();
 	}
 
+	@Disabled
 	@Test
 	void testTableAccess() throws Exception {
 		Connection con = null;
@@ -32,9 +34,8 @@ class DataTest {
 			
 			rsGames = con.createStatement().executeQuery("SELECT COUNT(codigo) FROM juego;");
 			
-			if(rsGames.next()) {
-				iGames = rsGames.getInt(1);
-			}
+			rsGames.next();
+			iGames = rsGames.getInt(1);
 			
 			int i = 0;
 			while(rs.next()) {
@@ -59,35 +60,24 @@ class DataTest {
 	
 	@Test
 	void testString2Sql() throws Exception{
-		String sResult = null;
-		
 		try {
-			sResult = Data.String2Sql("hola", false, false);
-			assertEquals("hola", sResult);
+			assertEquals("hola", Data.String2Sql("hola", false, false));
+		
+			assertEquals("'hola'", Data.String2Sql("hola", true, false));
 			
-			sResult = Data.String2Sql("hola", true, false);
-			assertEquals("'hola'", sResult);
+			assertEquals("%hola%", Data.String2Sql("hola", false, true));
 			
-			sResult = Data.String2Sql("hola", false, true);
-			assertEquals("%hola%", sResult);
+			assertEquals("'%hola%'", Data.String2Sql("hola", true, true));
 			
-			sResult = Data.String2Sql("hola", true, true);
-			assertEquals("'%hola%'", sResult);
+			assertEquals("O''Connell", Data.String2Sql("O'Connell", false, false));
 			
-			sResult = Data.String2Sql("O'Connell", false, false);
-			assertEquals("O''Connell", sResult);
+			assertEquals("'O''Connell'", Data.String2Sql("O'Connell", true, false));
 			
-			sResult = Data.String2Sql("O'Connell", true, false);
-			assertEquals("'O''Connell'", sResult);
+			assertEquals("%''Smith ''%", Data.String2Sql("'Smith '", false, true));
 			
-			sResult = Data.String2Sql("'Smith '", false, true);
-			assertEquals("%''Smith ''%", sResult);
+			assertEquals("'''Smith '''", Data.String2Sql("'Smith '", true, false));
 			
-			sResult = Data.String2Sql("'Smith '", true, false);
-			assertEquals("'''Smith '''", sResult);
-			
-			sResult = Data.String2Sql("'Smith '", true, true);
-			assertEquals("'%''Smith ''%'", sResult);
+			assertEquals("'%''Smith ''%'", Data.String2Sql("'Smith '", true, true));
 		}catch(Exception ee) {
 			throw ee;
 		}
@@ -95,15 +85,10 @@ class DataTest {
 	
 	@Test
 	void testBoolean2Sql() throws Exception{
-		int iResultBoolean = -1;
 		try {
-			iResultBoolean = Data.Boolean2Sql(true);
+			assertEquals(1, Data.Boolean2Sql(true));
 			
-			assertEquals(1, iResultBoolean);
-			
-			iResultBoolean = Data.Boolean2Sql(false);
-			
-			assertEquals(0, iResultBoolean);
+			assertEquals(0, Data.Boolean2Sql(false));	
 		}catch(Exception ee) {
 			throw ee;
 		}
