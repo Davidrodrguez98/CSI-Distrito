@@ -26,6 +26,12 @@ public class Juego {
 		_iNParticipantes = iNParticipantes;
 	}
 
+	/**
+	 * Constructor de la clase Juego.
+	 * @param sCodigo es el código del juego.
+	 * @throws Exception cuando hay un error en la conexión con la base de datos.
+	 */
+	//TODO: Precondition: debe existir un Juego con código sCodigo en la base de datos
 	public Juego (String sCodigo) throws Exception{
 		Connection con = null;
 		ResultSet rs = null;
@@ -45,11 +51,23 @@ public class Juego {
 		}
 		
 	}
-	
+
+	/**
+	 * Procedimiento para mostrar información en tipo String de un objeto Juego.
+	 * @return String con la información del juego.
+	 */
 	public String toString () {
 		return super.toString() + ":" + _sCodigo + ":" + _iNParticipantes;
 	}
 	
+	/**
+	 * Crea una instancia de Juego.
+	 * @param sCodigo
+	 * @param iNParticipantes
+	 * @return una instancia de Juego.
+	 * @throws Exception
+	 */
+	//TODO: Precondition: no debe existir un Juego con código igual a sCodigo ni nParticipantes igual a iNParticipantes.
 	public static Juego Create (String sCodigo, int iNParticipantes) throws Exception {
 		Connection con = null;
 		

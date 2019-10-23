@@ -31,6 +31,11 @@ public static String getPropertiesUrl() { return "./db.properties"; }
 				.getProperty("jdbc.driverClassName")).newInstance();
 	}
 	
+	/**
+	 * Conversor de Booleano a formato Sql, que en este caso es un entero
+	 * @param b
+	 * @return int, si b es true devuelve 1 y si es false, 0
+	 */
 	public static int Boolean2Sql(boolean b) {
 		if(b) 
 			return 1;
@@ -38,6 +43,13 @@ public static String getPropertiesUrl() { return "./db.properties"; }
 		return 0;
 	}
 	
+	/**
+	 * Convierte un String a formato SQL
+	 * @param s
+	 * @param bAddQuotes
+	 * @param bAddWildcards
+	 * @return String
+	 */
 	public static String String2Sql(String s, boolean bAddQuotes, boolean bAddWildcards) {
 		String sResult = s;
 

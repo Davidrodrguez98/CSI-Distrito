@@ -17,6 +17,10 @@ class JuegoTest {
 		Data.LoadDriver();
 	}
 
+	/**
+	 * Test del método Constructor de la clase Juego.
+	 * @throws Exception si la instancia de Juego no corresponde con la esperada.
+	 */
 	@Test
 	void testConstructor() throws Exception {
 		Juego game = null;
@@ -33,6 +37,10 @@ class JuegoTest {
 		
 	}
 	
+	/**
+	 * Test del método Create de la clase Juego.
+	 * @throws Exception si el Juego creado no es el esperado.
+	 */
 	@Test
 	public void testCreate() throws Exception {
 		Juego game = null;

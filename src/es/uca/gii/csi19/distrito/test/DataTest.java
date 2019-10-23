@@ -58,6 +58,10 @@ class DataTest {
 		}
 	}
 	
+	/**
+	 * Test de String2Sql.
+	 * @throws Exception si los resultados no son los esperados.
+	 */
 	@Test
 	void testString2Sql() throws Exception{
 		try {
@@ -83,6 +87,10 @@ class DataTest {
 		}
 	}
 	
+	/**
+	 * Test de Boolean2Sql
+	 * @throws Exception si los resultados no son los esperados.
+	 */
 	@Test
 	void testBoolean2Sql() throws Exception{
 		try {
