@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-10-2019 a las 17:22:07
+-- Tiempo de generación: 07-11-2019 a las 13:40:20
 -- Versión del servidor: 10.1.37-MariaDB
 -- Versión de PHP: 7.2.12
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `juego` (
+  `id` int(11) NOT NULL,
   `codigo` varchar(20) NOT NULL,
   `nParticipantes` int(11) NOT NULL,
   `fechaInicio` date DEFAULT NULL,
@@ -39,10 +40,15 @@ CREATE TABLE `juego` (
 -- Volcado de datos para la tabla `juego`
 --
 
-INSERT INTO `juego` (`codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`) VALUES
-('Juego1', 14, '2019-10-01', '2019-10-05'),
-('Juego2', 28, '2019-10-14', NULL),
-('Juego3', 20, NULL, NULL);
+INSERT INTO `juego` (`id`, `codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`) VALUES
+(1, 'Juego1', 14, '2019-10-01', '2019-10-05'),
+(2, 'Juego2Editado', 2, '2019-10-14', NULL),
+(16, 'Juego3', 12, NULL, NULL),
+(17, 'Juego34', 50, NULL, NULL),
+(18, 'Juego23', 58, NULL, NULL),
+(19, 'Juego27', 19, NULL, NULL),
+(27, 'hola', 7, NULL, NULL),
+(29, 'nuevoEditado', 76, NULL, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -52,7 +58,17 @@ INSERT INTO `juego` (`codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`) VALU
 -- Indices de la tabla `juego`
 --
 ALTER TABLE `juego`
-  ADD PRIMARY KEY (`codigo`);
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `juego`
+--
+ALTER TABLE `juego`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

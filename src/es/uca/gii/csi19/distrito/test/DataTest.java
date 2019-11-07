@@ -40,7 +40,7 @@ class DataTest {
 			int i = 0;
 			while(rs.next()) {
 				System.out.println(rs.getString("codigo") + " " + rs.getInt("nParticipantes")
-				+ " " + rs.getDate("fechaInicio") + " " + rs.getDate("fechaFin"));
+					+ " " + rs.getDate("fechaInicio") + " " + rs.getDate("fechaFin"));
 				i++;
 			}
 			

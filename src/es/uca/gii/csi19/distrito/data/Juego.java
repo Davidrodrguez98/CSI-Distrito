@@ -3,27 +3,40 @@ package es.uca.gii.csi19.distrito.data;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.lang.Integer;
 
 import es.uca.gii.csi19.distrito.data.Data;
 
 public class Juego {
 	private String _sCodigo;
-	private int _iNParticipantes;
+	private int _iNParticipantes, _iId;
+	private boolean _bIsDeleted = false;
 	
-	public String getsCodigo() {
+	public int getId() {
+		return _iId;
+	}
+	
+	public String getCodigo() {
 		return _sCodigo;
 	}
 
-	public void setsCodigo(String sCodigo) {
+	public void setCodigo(String sCodigo) throws Exception {
+		if (sCodigo.equals(""))
+			throw new Exception("El código es obligatorio");
 		_sCodigo = sCodigo;
 	}
 
-	public int getiNParticipantes() {
+	public int getNParticipantes() {
 		return _iNParticipantes;
 	}
 
-	public void setiNParticipantes(int iNParticipantes) {
+	public void setNParticipantes(int iNParticipantes) {
 		_iNParticipantes = iNParticipantes;
+	}
+	
+	public boolean getIsDeleted() {
+		return _bIsDeleted;
 	}
 
 	/**
@@ -32,21 +45,22 @@ public class Juego {
 	 * @throws Exception cuando hay un error en la conexión con la base de datos.
 	 */
 	//TODO: Precondition: debe existir un Juego con código sCodigo en la base de datos
-	public Juego (String sCodigo) throws Exception{
+	public Juego (int iId) throws Exception{
 		Connection con = null;
 		ResultSet rs = null;
 		
 		try {
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT codigo, nParticipantes FROM Juego WHERE codigo = " + Data.String2Sql(sCodigo, true, false));
+			rs = con.createStatement().executeQuery("SELECT id, codigo, nParticipantes FROM Juego WHERE id = " + iId);
 			
 			rs.next();
+			_iId = rs.getInt("id");
 			_sCodigo = rs.getString("codigo");
 			_iNParticipantes = rs.getInt("nParticipantes");
 		}
 		catch (SQLException ee) { throw ee; }
 		finally {
-			if  (rs != null) rs.close();
+			if (rs != null) rs.close();
 			if (con != null) con.close();
 		}
 		
@@ -57,7 +71,7 @@ public class Juego {
 	 * @return String con la información del juego.
 	 */
 	public String toString () {
-		return super.toString() + ":" + _sCodigo + ":" + _iNParticipantes;
+		return super.toString() + ":" + _iId + ":" + _sCodigo + ":" + _iNParticipantes;
 	}
 	
 	/**
@@ -72,15 +86,123 @@ public class Juego {
 		Connection con = null;
 		
 		try {
+			if (sCodigo.equals("")) 
+				throw new Exception("El código es obligatorio");
+			
 			con = Data.Connection();
 			con.createStatement().executeUpdate(String.format("INSERT INTO Juego (codigo, nParticipantes) VALUES (%s, %d)", Data.String2Sql(sCodigo, true, false), iNParticipantes));
 			
-			return new Juego(sCodigo);
+			return new Juego(Data.LastId(con));
 		}
 		catch (SQLException ee) { throw ee; }
 		finally {
 			if (con != null) con.close();
 		}
+	}
+	
+	/**
+	 * @return número de juegos existentes actualmente en la base de datos.
+	 * @throws Exception
+	 */
+	public static int Size() throws Exception {
+		Connection con = null;
+		ResultSet rs = null;
+		
+		try {
+			con = Data.Connection();
+			rs = con.createStatement().executeQuery("SELECT COUNT(id) as nJuegos FROM Juego");
+			
+			rs.next();
+			return rs.getInt("nJuegos");
+		}
+		catch(SQLException ee) { throw ee; }
+		finally {
+			if (rs != null) rs.close();
+			if (con != null) con.close();
+		}
+	}
+	
+	/**
+	 * Elimina un registro de la base de datos.
+	 * @throws Exception
+	 */
+	public void Delete() throws Exception {
+		Connection con = null;
+		
+		if(_bIsDeleted)
+			throw new Exception("El juego " + _sCodigo + " ya ha sido eliminado");
+		try {
+			con = Data.Connection();
+			con.createStatement().executeUpdate(String.format("DELETE FROM Juego WHERE id = " + _iId));
+			_bIsDeleted = true;
+		}
+		catch(SQLException ee) { throw ee; }
+		finally {
+			if (con != null) con.close();
+		}
+	}
+	
+	/**
+	 * Modifica un registro de la base de datos.
+	 * @throws Exception
+	 */
+	public void Update() throws Exception {
+		Connection con = null;
+		
+		if(_bIsDeleted)
+			throw new Exception("El juego " + _sCodigo + " está eliminado");
+		try {
+			con = Data.Connection();
+			con.createStatement().executeUpdate(String.format("UPDATE Juego SET codigo = %s,nParticipantes = %d WHERE id = %d", Data.String2Sql(_sCodigo, true, false), _iNParticipantes, _iId));
+		}
+		catch(SQLException ee) { throw ee; }
+		finally {
+			if (con != null) con.close();
+		}
+	}
+	
+	/**
+	 * Selecciona los registros que coinciden con un cierto criterio de búsqueda
+	 * @param sCodigo
+	 * @param iNParticipantes
+	 * @return ArrayList de Juego 
+	 * @throws Exception
+	 */
+	public static ArrayList<Juego> Select(String sCodigo, Integer iNParticipantes) throws Exception {
+		ArrayList<Juego> aLista = new ArrayList<Juego>();
+		Connection con = null;
+		ResultSet rs = null;
+		
+		try {
+			con = Data.Connection();
+			rs = con.createStatement().executeQuery("SELECT id, codigo, nParticipantes FROM Juego " + Where(sCodigo, iNParticipantes));
+			
+			while(rs.next())
+				aLista.add(new Juego(rs.getInt("id")));
+			
+			return aLista;
+		}
+		catch(SQLException ee) { throw ee; }
+		finally {
+			if (rs != null) rs.close();
+			if (con != null) con.close();
+		}
+	}
+	
+	/**
+	 * Genera la condición o condiciones de búsqueda de la cláusula WHERE
+	 * @param sCodigo
+	 * @param iNParticipantes
+	 * @return String
+	 */
+	private static String Where(String sCodigo, Integer iNParticipantes) {
+		if(sCodigo != null && iNParticipantes != null)
+			return "WHERE codigo LIKE " + Data.String2Sql(sCodigo, true, true) + " && nParticipantes = " +iNParticipantes.intValue();
+		if(sCodigo == null && iNParticipantes == null)
+			return "";
+		if(sCodigo != null)
+			return "WHERE codigo LIKE " + Data.String2Sql(sCodigo, true, true);
+		return "WHERE nParticipantes = " + iNParticipantes.intValue();
 	}
 	
 }

@@ -3,6 +3,7 @@ package es.uca.gii.csi19.distrito.data;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.Properties;
 
 import es.uca.gii.csi19.distrito.util.Config;
@@ -10,7 +11,7 @@ import es.uca.gii.csi19.distrito.util.Config;
 
 public class Data {
 
-public static String getPropertiesUrl() { return "./db.properties"; }
+	public static String getPropertiesUrl() { return "./db.properties"; }
 	
 	public static Connection Connection() throws Exception{
 		try {
@@ -51,20 +52,35 @@ public static String getPropertiesUrl() { return "./db.properties"; }
 	 * @return String
 	 */
 	public static String String2Sql(String s, boolean bAddQuotes, boolean bAddWildcards) {
-		String sResult = s;
 
-		sResult = sResult.replace("'", "''");
+		s = s.replace("'", "''");
 		
-		if(bAddWildcards) {
-			sResult = "%" + sResult;
-			sResult = sResult + "%";
-		}
+		if(bAddWildcards) 
+			s = "%" + s + "%";
 		
-		if(bAddQuotes) {
-			sResult = "'" + sResult;
-			sResult = sResult + "'";
-		}
+		if(bAddQuotes) 
+			s = "'" + s + "'";
 		
-		return sResult;
+		return s;
 	}
+	
+	/**
+	 * @param con
+	 * @return último identificador insertado
+	 * @throws Exception
+	 */
+	public static int LastId(Connection con) throws Exception {
+		ResultSet rs = null;
+		
+		try {
+			rs = con.createStatement().executeQuery(Config.Properties(getPropertiesUrl()).getProperty("jdbc.lastIdSentence"));
+			rs.next();
+			return rs.getInt(1);
+		}
+		catch(Exception ee) { throw ee; }
+		finally {
+			if (rs != null) rs.close();
+		}
+	}
+	
 }
