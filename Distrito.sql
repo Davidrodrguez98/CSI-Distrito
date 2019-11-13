@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-11-2019 a las 13:40:20
--- Versión del servidor: 10.1.37-MariaDB
--- Versión de PHP: 7.2.12
+-- Tiempo de generación: 13-11-2019 a las 19:28:07
+-- Versión del servidor: 10.4.8-MariaDB
+-- Versión de PHP: 7.3.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -41,14 +41,12 @@ CREATE TABLE `juego` (
 --
 
 INSERT INTO `juego` (`id`, `codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`) VALUES
-(1, 'Juego1', 14, '2019-10-01', '2019-10-05'),
+(1, 'Juego1', 20, '2019-10-01', '2019-10-05'),
 (2, 'Juego2Editado', 2, '2019-10-14', NULL),
-(16, 'Juego3', 12, NULL, NULL),
 (17, 'Juego34', 50, NULL, NULL),
 (18, 'Juego23', 58, NULL, NULL),
-(19, 'Juego27', 19, NULL, NULL),
-(27, 'hola', 7, NULL, NULL),
-(29, 'nuevoEditado', 76, NULL, NULL);
+(19, 'Juego27', 14, NULL, NULL),
+(31, 'Juego3', 12, NULL, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -58,7 +56,8 @@ INSERT INTO `juego` (`id`, `codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`
 -- Indices de la tabla `juego`
 --
 ALTER TABLE `juego`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `codigo` (`codigo`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -68,7 +67,7 @@ ALTER TABLE `juego`
 -- AUTO_INCREMENT de la tabla `juego`
 --
 ALTER TABLE `juego`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
