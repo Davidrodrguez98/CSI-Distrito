@@ -61,12 +61,12 @@ public class IfrJuego extends JInternalFrame {
 					}
 				}
 				catch(NumberFormatException eformato) {
-					JOptionPane.showMessageDialog(null, "Debe introducir un número en la casilla Numero de participantes",
+					JOptionPane.showMessageDialog(null, "Debe introducir un número",
 							"Error", JOptionPane.ERROR_MESSAGE);
 				}
 				catch(Exception ee) { 
 					JOptionPane.showMessageDialog(null, 
-							"Ha habido un problema en la aplicación, compruebe que ha rellenado todas las casillas",
+							"Ha habido un problema en la aplicación. Compruebe que ha rellenado todas las casillas",
 							"Error", JOptionPane.ERROR_MESSAGE); 
 				}
 			}

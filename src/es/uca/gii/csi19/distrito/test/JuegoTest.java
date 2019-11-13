@@ -65,9 +65,9 @@ class JuegoTest {
 	@Test
 	public void testSelect() throws Exception {
 		try {
-			assertEquals(Juego.Select(null, null).size(), Juego.Size());
-			assertEquals(Juego.Select("Juego", 20).size(), 1);
-			assertEquals(3, Juego.Select("Juego", null).size());
+			assertEquals(Juego.Size(), Juego.Select(null, null).size());
+			assertEquals(1, Juego.Select("Juego", 20).size());
+			assertEquals(Juego.Size(), Juego.Select("Juego", null).size());
 			assertEquals(1, Juego.Select(null, 14).size());
 		}
 		catch(Exception ee) { throw ee; }

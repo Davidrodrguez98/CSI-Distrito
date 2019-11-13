@@ -68,6 +68,14 @@ public class FrmMain {
 		menuBar.add(mitBuscar);
 		
 		JMenuItem mitBuscarJuego = new JMenuItem("Juego");
+		mitBuscarJuego.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IfrJuegos ifrJuegos = new IfrJuegos();
+				ifrJuegos.setBounds(0, 0, 350, 200);
+				frame.getContentPane().add(ifrJuegos, 0);
+				ifrJuegos.setVisible(true);
+			}
+		});
 		mitBuscar.add(mitBuscarJuego);
 		frame.getContentPane().setLayout(null);
 	}

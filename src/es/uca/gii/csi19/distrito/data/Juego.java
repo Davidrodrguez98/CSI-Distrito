@@ -51,10 +51,10 @@ public class Juego {
 		
 		try {
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT id, codigo, nParticipantes FROM Juego WHERE id = " + iId);
+			rs = con.createStatement().executeQuery("SELECT codigo, nParticipantes FROM Juego WHERE id = " + iId);
 			
 			rs.next();
-			_iId = rs.getInt("id");
+			_iId = iId;
 			_sCodigo = rs.getString("codigo");
 			_iNParticipantes = rs.getInt("nParticipantes");
 		}
@@ -133,7 +133,7 @@ public class Juego {
 			throw new Exception("El juego " + _sCodigo + " ya ha sido eliminado");
 		try {
 			con = Data.Connection();
-			con.createStatement().executeUpdate(String.format("DELETE FROM Juego WHERE id = " + _iId));
+			con.createStatement().executeUpdate("DELETE FROM Juego WHERE id = " + _iId);
 			_bIsDeleted = true;
 		}
 		catch(SQLException ee) { throw ee; }
@@ -169,7 +169,7 @@ public class Juego {
 	 * @throws Exception
 	 */
 	public static ArrayList<Juego> Select(String sCodigo, Integer iNParticipantes) throws Exception {
-		ArrayList<Juego> aLista = new ArrayList<Juego>();
+		ArrayList<Juego> aResultado = new ArrayList<Juego>();
 		Connection con = null;
 		ResultSet rs = null;
 		
@@ -178,9 +178,9 @@ public class Juego {
 			rs = con.createStatement().executeQuery("SELECT id, codigo, nParticipantes FROM Juego " + Where(sCodigo, iNParticipantes));
 			
 			while(rs.next())
-				aLista.add(new Juego(rs.getInt("id")));
+				aResultado.add(new Juego(rs.getInt("id")));
 			
-			return aLista;
+			return aResultado;
 		}
 		catch(SQLException ee) { throw ee; }
 		finally {
@@ -196,6 +196,7 @@ public class Juego {
 	 * @return String
 	 */
 	private static String Where(String sCodigo, Integer iNParticipantes) {
+		/*
 		if(sCodigo != null && iNParticipantes != null)
 			return "WHERE codigo LIKE " + Data.String2Sql(sCodigo, true, true) + " && nParticipantes = " +iNParticipantes.intValue();
 		if(sCodigo == null && iNParticipantes == null)
@@ -203,6 +204,14 @@ public class Juego {
 		if(sCodigo != null)
 			return "WHERE codigo LIKE " + Data.String2Sql(sCodigo, true, true);
 		return "WHERE nParticipantes = " + iNParticipantes.intValue();
+		*/
+		String sResultado = "WHERE";
+		
+		if(sCodigo != null)
+			sResultado += " codigo LIKE " + Data.String2Sql(sCodigo, true, true) + " AND ";
+		if(iNParticipantes != null)
+			sResultado += " nParticipantes = " + iNParticipantes.intValue() + " AND ";
+		return sResultado.substring(0, sResultado.length() - 5);
 	}
 	
 }
