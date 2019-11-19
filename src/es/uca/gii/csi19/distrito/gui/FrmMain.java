@@ -56,7 +56,7 @@ public class FrmMain {
 		JMenuItem mitNuevoJuego = new JMenuItem("Juego");
 		mitNuevoJuego.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IfrJuego ifrJuego = new IfrJuego();
+				IfrJuego ifrJuego = new IfrJuego(null);
 				ifrJuego.setBounds(0, 0, 350, 200);
 				frame.getContentPane().add(ifrJuego);
 				ifrJuego.setVisible(true);
@@ -70,7 +70,7 @@ public class FrmMain {
 		JMenuItem mitBuscarJuego = new JMenuItem("Juego");
 		mitBuscarJuego.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IfrJuegos ifrJuegos = new IfrJuegos();
+				IfrJuegos ifrJuegos = new IfrJuegos(frame);
 				ifrJuegos.setBounds(0, 0, 350, 200);
 				frame.getContentPane().add(ifrJuegos, 0);
 				ifrJuegos.setVisible(true);

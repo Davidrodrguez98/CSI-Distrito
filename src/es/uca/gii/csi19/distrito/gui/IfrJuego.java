@@ -23,7 +23,8 @@ public class IfrJuego extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public IfrJuego() {
+	public IfrJuego(Juego juego) {	
+		
 		setResizable(true);
 		setClosable(true);
 		setTitle("Juego");
@@ -47,6 +48,13 @@ public class IfrJuego extends JInternalFrame {
 		txtNumeroDeParticipantes.setBounds(10, 78, 86, 20);
 		getContentPane().add(txtNumeroDeParticipantes);
 		txtNumeroDeParticipantes.setColumns(10);
+		
+		_juego = juego;
+
+		if(_juego != null) {
+			txtCodigo.setText(_juego.getCodigo());
+			txtNumeroDeParticipantes.setText(String.valueOf(_juego.getNParticipantes()));
+		}	
 		
 		JButton butGuardar = new JButton("Guardar");
 		butGuardar.addActionListener(new ActionListener() {

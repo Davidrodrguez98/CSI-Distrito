@@ -6,14 +6,15 @@ import es.uca.gii.csi19.distrito.data.Juego;
 
 public class JuegosTableModel extends javax.swing.table.AbstractTableModel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Juego> _aData;
 	
 	public JuegosTableModel(ArrayList<Juego> aData) {
 		_aData = aData;
+	}
+	
+	public Juego getData(int iRow) {
+		return _aData.get(iRow);
 	}
 	
 	@Override
@@ -28,7 +29,7 @@ public class JuegosTableModel extends javax.swing.table.AbstractTableModel {
 		return _aData.size();
 	}
 
-	@Override
+	@Override 
 	public Object getValueAt(int iRow, int iCol) {
 		// TODO Auto-generated method stub
 		Juego juego = _aData.get(iRow);
