@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import es.uca.gii.csi19.distrito.data.Data;
 import es.uca.gii.csi19.distrito.data.Juego;
+import es.uca.gii.csi19.distrito.data.TipoMapa;
 
 class JuegoTest {
 
@@ -46,9 +47,11 @@ class JuegoTest {
 	@Test
 	public void testCreate() throws Exception {
 		Juego juego = null;
+		TipoMapa tipoMapa = null;
 		
 		try {
-			juego = Juego.Create("Juego3", 12);
+			tipoMapa = new TipoMapa(1);
+			juego = Juego.Create(tipoMapa, "Juego3", 12);
 			
 			assertEquals("Juego3", juego.getCodigo());
 			assertEquals(12, juego.getNParticipantes());
@@ -65,10 +68,14 @@ class JuegoTest {
 	@Test
 	public void testSelect() throws Exception {
 		try {
-			assertEquals(Juego.Size(), Juego.Select(null, null).size());
-			assertEquals(1, Juego.Select("Juego", 20).size());
-			assertEquals(Juego.Size(), Juego.Select("Juego", null).size());
-			assertEquals(1, Juego.Select(null, 14).size());
+			assertEquals(Juego.Size(), Juego.Select(null, null, null).size());
+			assertEquals(1, Juego.Select("Jungla", null, null).size());
+			assertEquals(Juego.Size(), Juego.Select(null, "Juego", null).size());
+			assertEquals(Juego.Size(), Juego.Select(null, null, 20).size());
+			assertEquals(Juego.Size(), Juego.Select("Desierto", "Juego", null).size());
+			assertEquals(Juego.Size(), Juego.Select("Desierto", null, 20).size());
+			assertEquals(Juego.Size(), Juego.Select(null, "Juego", 10).size());
+			assertEquals(Juego.Size(), Juego.Select("Ciudad", "Juego", 20).size());
 		}
 		catch(Exception ee) { throw ee; }
 	}

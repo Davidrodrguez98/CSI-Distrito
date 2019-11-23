@@ -9,10 +9,19 @@ import java.lang.Integer;
 import es.uca.gii.csi19.distrito.data.Data;
 
 public class Juego {
+	private TipoMapa _tipoMapa;
 	private String _sCodigo;
 	private int _iNParticipantes, _iId;
 	private boolean _bIsDeleted = false;
 	
+	public TipoMapa getTipoMapa() {
+		return _tipoMapa;
+	}
+
+	public void setTipoMapa(TipoMapa tipoMapa) {
+		_tipoMapa = tipoMapa;
+	}
+
 	public int getId() {
 		return _iId;
 	}
@@ -41,7 +50,7 @@ public class Juego {
 
 	/**
 	 * Constructor de la clase Juego.
-	 * @param sCodigo es el código del juego.
+	 * @param iId 
 	 * @throws Exception cuando hay un error en la conexión con la base de datos.
 	 */
 	//TODO: Precondition: debe existir un Juego con código sCodigo en la base de datos
@@ -51,10 +60,12 @@ public class Juego {
 		
 		try {
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT codigo, nParticipantes FROM Juego WHERE id = " + iId);
+			rs = con.createStatement().executeQuery("SELECT Id_TipoMapa, codigo, nParticipantes"
+					+ " FROM Juego WHERE id = " + iId);
 			
 			rs.next();
 			_iId = iId;
+			_tipoMapa = new TipoMapa(rs.getInt("Id_TipoMapa"));
 			_sCodigo = rs.getString("codigo");
 			_iNParticipantes = rs.getInt("nParticipantes");
 		}
@@ -71,18 +82,19 @@ public class Juego {
 	 * @return String con la información del juego.
 	 */
 	public String toString () {
-		return super.toString() + ":" + _iId + ":" + _sCodigo + ":" + _iNParticipantes;
+		return super.toString() + ":" + _iId + ":" + _tipoMapa.toString() + ":" + _sCodigo + ":" + _iNParticipantes;
 	}
 	
 	/**
 	 * Crea una instancia de Juego.
+	 * @param tipoMapa
 	 * @param sCodigo
 	 * @param iNParticipantes
 	 * @return una instancia de Juego.
 	 * @throws Exception
 	 */
 	//TODO: Precondition: no debe existir un Juego con código igual a sCodigo ni nParticipantes igual a iNParticipantes.
-	public static Juego Create (String sCodigo, int iNParticipantes) throws Exception {
+	public static Juego Create (TipoMapa tipoMapa, String sCodigo, int iNParticipantes) throws Exception {
 		Connection con = null;
 		
 		try {
@@ -90,7 +102,7 @@ public class Juego {
 				throw new Exception("El código es obligatorio");
 			
 			con = Data.Connection();
-			con.createStatement().executeUpdate(String.format("INSERT INTO Juego (codigo, nParticipantes) VALUES (%s, %d)", Data.String2Sql(sCodigo, true, false), iNParticipantes));
+			con.createStatement().executeUpdate(String.format("INSERT INTO Juego (Id_TipoMapa, codigo, nParticipantes) VALUES (%d, %s, %d)", tipoMapa.getId(), Data.String2Sql(sCodigo, true, false), iNParticipantes));
 			
 			return new Juego(Data.LastId(con));
 		}
@@ -153,7 +165,7 @@ public class Juego {
 			throw new Exception("El juego " + _sCodigo + " está eliminado");
 		try {
 			con = Data.Connection();
-			con.createStatement().executeUpdate(String.format("UPDATE Juego SET codigo = %s,nParticipantes = %d WHERE id = %d", Data.String2Sql(_sCodigo, true, false), _iNParticipantes, _iId));
+			con.createStatement().executeUpdate(String.format("UPDATE Juego SET Id_TipoMapa = %d, codigo = %s, nParticipantes = %d WHERE id = %d", _tipoMapa.getId(), Data.String2Sql(_sCodigo, true, false), _iNParticipantes, _iId));
 		}
 		catch(SQLException ee) { throw ee; }
 		finally {
@@ -163,19 +175,22 @@ public class Juego {
 	
 	/**
 	 * Selecciona los registros que coinciden con un cierto criterio de búsqueda
+	 * @param sTipoMapa
 	 * @param sCodigo
 	 * @param iNParticipantes
 	 * @return ArrayList de Juego 
 	 * @throws Exception
 	 */
-	public static ArrayList<Juego> Select(String sCodigo, Integer iNParticipantes) throws Exception {
+	public static ArrayList<Juego> Select(String sTipoMapa, String sCodigo, Integer iNParticipantes) throws Exception {
 		ArrayList<Juego> aResultado = new ArrayList<Juego>();
 		Connection con = null;
 		ResultSet rs = null;
 		
 		try {
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT id, codigo, nParticipantes FROM Juego " + Where(sCodigo, iNParticipantes));
+			//System.out.print(b);
+			rs = con.createStatement().executeQuery("SELECT Juego.id id FROM Juego JOIN tipomapa ON juego.Id_TipoMapa = tipomapa.id "
+					+ Where(sTipoMapa, sCodigo, iNParticipantes));
 			
 			while(rs.next())
 				aResultado.add(new Juego(rs.getInt("id")));
@@ -191,22 +206,16 @@ public class Juego {
 	
 	/**
 	 * Genera la condición o condiciones de búsqueda de la cláusula WHERE
+	 * @param sTipoMapa
 	 * @param sCodigo
 	 * @param iNParticipantes
 	 * @return String
 	 */
-	private static String Where(String sCodigo, Integer iNParticipantes) {
-		/*
-		if(sCodigo != null && iNParticipantes != null)
-			return "WHERE codigo LIKE " + Data.String2Sql(sCodigo, true, true) + " && nParticipantes = " +iNParticipantes.intValue();
-		if(sCodigo == null && iNParticipantes == null)
-			return "";
-		if(sCodigo != null)
-			return "WHERE codigo LIKE " + Data.String2Sql(sCodigo, true, true);
-		return "WHERE nParticipantes = " + iNParticipantes.intValue();
-		*/
+	private static String Where(String sTipoMapa, String sCodigo, Integer iNParticipantes) {
 		String sResultado = "WHERE";
 		
+		if(sTipoMapa != null)
+			sResultado += " tipomapa.nombre LIKE " + Data.String2Sql(sTipoMapa, true, true) + " AND ";
 		if(sCodigo != null)
 			sResultado += " codigo LIKE " + Data.String2Sql(sCodigo, true, true) + " AND ";
 		if(iNParticipantes != null)

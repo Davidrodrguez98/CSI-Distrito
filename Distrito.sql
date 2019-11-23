@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-11-2019 a las 19:28:07
+-- Tiempo de generación: 20-11-2019 a las 12:12:09
 -- Versión del servidor: 10.4.8-MariaDB
 -- Versión de PHP: 7.3.11
 
@@ -30,23 +30,47 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `juego` (
   `id` int(11) NOT NULL,
+  `Id_TipoMapa` int(11) NOT NULL,
   `codigo` varchar(20) NOT NULL,
   `nParticipantes` int(11) NOT NULL,
   `fechaInicio` date DEFAULT NULL,
   `fechaFin` date DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `juego`
 --
 
-INSERT INTO `juego` (`id`, `codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`) VALUES
-(1, 'Juego1', 20, '2019-10-01', '2019-10-05'),
-(2, 'Juego2Editado', 2, '2019-10-14', NULL),
-(17, 'Juego34', 50, NULL, NULL),
-(18, 'Juego23', 58, NULL, NULL),
-(19, 'Juego27', 14, NULL, NULL),
-(31, 'Juego3', 12, NULL, NULL);
+INSERT INTO `juego` (`id`, `Id_TipoMapa`, `codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`) VALUES
+(1, 1, 'JuegoEditado1', 20, '2019-10-01', '2019-10-05'),
+(2, 3, 'Juego2Editado', 2, '2019-10-14', NULL),
+(17, 3, 'Juego34', 50, NULL, NULL),
+(18, 1, 'Juego23', 58, NULL, NULL),
+(19, 2, 'Juego27', 14, NULL, NULL),
+(31, 3, 'Juego3', 12, NULL, NULL),
+(33, 3, 'Juego77', 34, NULL, NULL),
+(34, 3, 'JuegoNuevo3000', 2, NULL, NULL),
+(35, 1, 'Juego1234', 78, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipomapa`
+--
+
+CREATE TABLE `tipomapa` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `tipomapa`
+--
+
+INSERT INTO `tipomapa` (`id`, `nombre`) VALUES
+(1, 'Jungla'),
+(2, 'Desierto'),
+(3, 'Ciudad');
 
 --
 -- Índices para tablas volcadas
@@ -57,7 +81,14 @@ INSERT INTO `juego` (`id`, `codigo`, `nParticipantes`, `fechaInicio`, `fechaFin`
 --
 ALTER TABLE `juego`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `codigo` (`codigo`);
+  ADD UNIQUE KEY `codigo` (`codigo`),
+  ADD KEY `Id_TipoMapa` (`Id_TipoMapa`);
+
+--
+-- Indices de la tabla `tipomapa`
+--
+ALTER TABLE `tipomapa`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -67,7 +98,23 @@ ALTER TABLE `juego`
 -- AUTO_INCREMENT de la tabla `juego`
 --
 ALTER TABLE `juego`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
+-- AUTO_INCREMENT de la tabla `tipomapa`
+--
+ALTER TABLE `tipomapa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `juego`
+--
+ALTER TABLE `juego`
+  ADD CONSTRAINT `juego_ibfk_1` FOREIGN KEY (`Id_TipoMapa`) REFERENCES `tipomapa` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

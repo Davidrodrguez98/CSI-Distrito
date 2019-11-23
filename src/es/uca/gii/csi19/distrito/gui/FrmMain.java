@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,7 @@ public class FrmMain {
 			}
 		});
 	}
-
+	
 	/**
 	 * Create the application.
 	 */
@@ -56,12 +57,18 @@ public class FrmMain {
 		JMenuItem mitNuevoJuego = new JMenuItem("Juego");
 		mitNuevoJuego.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IfrJuego ifrJuego = new IfrJuego(null);
+				IfrJuego ifrJuego = null;
+				try {
+					ifrJuego = new IfrJuego(null);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Error en la aplicación", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 				ifrJuego.setBounds(0, 0, 350, 200);
 				frame.getContentPane().add(ifrJuego);
 				ifrJuego.setVisible(true);
 			}
 		});
+		
 		mitNuevo.add(mitNuevoJuego);
 		
 		JMenu mitBuscar = new JMenu("Buscar");
@@ -70,7 +77,12 @@ public class FrmMain {
 		JMenuItem mitBuscarJuego = new JMenuItem("Juego");
 		mitBuscarJuego.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IfrJuegos ifrJuegos = new IfrJuegos(frame);
+				IfrJuegos ifrJuegos = null;
+				try {
+					ifrJuegos = new IfrJuegos(frame);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Error en la aplicación", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 				ifrJuegos.setBounds(0, 0, 350, 200);
 				frame.getContentPane().add(ifrJuegos, 0);
 				ifrJuegos.setVisible(true);

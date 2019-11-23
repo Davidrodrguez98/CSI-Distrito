@@ -6,10 +6,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import es.uca.gii.csi19.distrito.data.Juego;
+import es.uca.gii.csi19.distrito.data.TipoMapa;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class IfrJuego extends JInternalFrame {
 	/**
@@ -22,8 +24,10 @@ public class IfrJuego extends JInternalFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws Exception 
 	 */
-	public IfrJuego(Juego juego) {	
+	public IfrJuego(Juego juego) throws Exception {	
+		JComboBox<TipoMapa> cmbTipoMapa = new JComboBox<TipoMapa>();
 		
 		setResizable(true);
 		setClosable(true);
@@ -52,6 +56,7 @@ public class IfrJuego extends JInternalFrame {
 		_juego = juego;
 
 		if(_juego != null) {
+			cmbTipoMapa.setSelectedItem(_juego.getTipoMapa());
 			txtCodigo.setText(_juego.getCodigo());
 			txtNumeroDeParticipantes.setText(String.valueOf(_juego.getNParticipantes()));
 		}	
@@ -61,12 +66,21 @@ public class IfrJuego extends JInternalFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					if (_juego == null)
-						_juego = Juego.Create(txtCodigo.getText(), Integer.parseInt(txtNumeroDeParticipantes.getText()));
+						_juego = Juego.Create((TipoMapa) cmbTipoMapa.getModel().getSelectedItem(), txtCodigo.getText(), Integer.parseInt(txtNumeroDeParticipantes.getText()));
 					else {
+						if ((TipoMapa) cmbTipoMapa.getModel().getSelectedItem() != null)
+							_juego.setTipoMapa((TipoMapa) cmbTipoMapa.getModel().getSelectedItem());
+						else 
+							throw new NullPointerException();
+						
 						_juego.setCodigo(txtCodigo.getText());
 						_juego.setNParticipantes(Integer.parseInt(txtNumeroDeParticipantes.getText()));
 						_juego.Update();
 					}
+				}
+				catch(NullPointerException eNulo) {
+					JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de mapa",
+							"Error", JOptionPane.ERROR_MESSAGE);
 				}
 				catch(NumberFormatException eformato) {
 					JOptionPane.showMessageDialog(null, "Debe introducir un número",
@@ -79,8 +93,17 @@ public class IfrJuego extends JInternalFrame {
 				}
 			}
 		});
-		butGuardar.setBounds(30, 120, 89, 23);
+		butGuardar.setBounds(232, 129, 89, 23);
 		getContentPane().add(butGuardar);
+		
+		JLabel lblTipoDeMapa = new JLabel("Tipo de mapa");
+		lblTipoDeMapa.setBounds(10, 109, 86, 14);
+		getContentPane().add(lblTipoDeMapa);
+		
+		
+		cmbTipoMapa.setModel(new TipoMapaListModel(TipoMapa.Select()));
+		cmbTipoMapa.setBounds(10, 130, 86, 20);
+		getContentPane().add(cmbTipoMapa);
 
 	}
 }

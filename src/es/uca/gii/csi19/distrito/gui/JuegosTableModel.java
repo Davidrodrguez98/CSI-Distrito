@@ -20,7 +20,7 @@ public class JuegosTableModel extends javax.swing.table.AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		// TODO Auto-generated method stub
-		return 2;
+		return 3;
 	}
 
 	@Override
@@ -36,8 +36,9 @@ public class JuegosTableModel extends javax.swing.table.AbstractTableModel {
 		
 		if(iCol == 0)
 			return juego.getCodigo();
-		
-		return juego.getNParticipantes();
+		if(iCol == 1)
+			return juego.getNParticipantes();
+		return juego.getTipoMapa().getNombre();
 	}
 
 }
